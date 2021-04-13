@@ -1,5 +1,8 @@
 package ru.job4j.dreamjob.servlet;
 
+import ru.job4j.dreamjob.Store;
+import ru.job4j.dreamjob.model.Post;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +12,8 @@ import java.io.IOException;
 public class PostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        req.setCharacterEncoding("UTF-8");
+        Store.instOf().save(new Post(0, req.getParameter("name")));
+        resp.sendRedirect(req.getContextPath() + "/posts.jsp");
     }
 }
