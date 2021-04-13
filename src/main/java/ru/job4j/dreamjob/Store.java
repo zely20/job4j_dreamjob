@@ -30,6 +30,11 @@ public class Store {
         posts.put(post.getId(), post);
     }
 
+    public void save (Candidate candidate){
+        candidate.setId(POST_ID.incrementAndGet());
+        candidates.put(candidate.getId(), candidate);
+    }
+
     public static Store instOf() {
         return INST;
     }
