@@ -1,6 +1,6 @@
 package ru.job4j.dreamjob.servlet;
 
-import ru.job4j.dreamjob.Store;
+import ru.job4j.dreamjob.store.Store;
 import ru.job4j.dreamjob.model.Candidate;
 
 import javax.servlet.ServletException;
