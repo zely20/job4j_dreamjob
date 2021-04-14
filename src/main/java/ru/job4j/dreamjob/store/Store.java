@@ -25,9 +25,15 @@ public class Store {
         candidates.put(3, new Candidate(3, "Senior Java"));
     }
 
-    public void save (Post post){
-        post.setId(POST_ID.incrementAndGet());
+    public void save(Post post) {
+        if (post.getId() == 0) {
+            post.setId(POST_ID.incrementAndGet());
+        }
         posts.put(post.getId(), post);
+    }
+
+    public Post findById(int id) {
+        return posts.get(id);
     }
 
     public void save (Candidate candidate){
