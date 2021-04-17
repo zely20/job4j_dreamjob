@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dreamjob.store.Store" %>
 <%@ page import="ru.job4j.dreamjob.model.Post" %>
+<%@ page import="ru.job4j.dreamjob.model.Candidate" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -21,17 +22,29 @@
     <title>Работа мечты</title>
 </head>
 <body>
+<body>
+<%
+    String id = request.getParameter("id");
+    Candidate candidate = new Candidate(0, "");
+    if (id != null) {
+        candidate = Store.instOf().findByIdCandidate(Integer.valueOf(id));
+    }
+%>
 <div class="container pt-3">
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Новая вакансия.
+                <% if (id == null) { %>
+                Новый кондидат.
+                <% } else { %>
+                Редактирование кондидата.
+                <% } %>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidates/save" method="post">
+                <form action="<%=request.getContextPath()%>/candidates/save?id=<%=candidate.getId()%>" method="post">
                     <div class="form-group">
                         <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" value="<%=candidate.getName()%>">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
@@ -39,5 +52,6 @@
         </div>
     </div>
 </div>
+</body>
 </body>
 </html>
