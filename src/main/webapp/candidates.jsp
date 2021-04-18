@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dreamjob.store.Store" %>
+<%@ page import="ru.job4j.dreamjob.store.MemStore" %>
 <%@ page import="ru.job4j.dreamjob.model.Candidate" %>
 <%@ page import="java.util.Collection" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>

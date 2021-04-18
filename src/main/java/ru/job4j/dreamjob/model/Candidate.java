@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.model;
 import java.util.Objects;
 
 public class Candidate {
+
     private int id;
     private String name;
 
@@ -39,5 +40,13 @@ public class Candidate {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Candidate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
