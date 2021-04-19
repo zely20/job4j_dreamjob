@@ -162,7 +162,7 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public Post findById(int id) {
+    public Post findByIdPost(int id) {
         Post result = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id=(?)")
@@ -172,6 +172,26 @@ public class PsqlStore implements Store {
             try (ResultSet post = ps.getResultSet()) {
                 if (post.next()) {
                     result = new Post(post.getInt(1), post.getString(2));
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public Candidate findByIdCandidate(int id) {
+        Candidate result = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM candidate WHERE id=(?)")
+        ) {
+            ps.setInt(1, id);
+            ps.execute();
+            try (ResultSet post = ps.getResultSet()) {
+                if (post.next()) {
+                    result = new Candidate(post.getInt(1), post.getString(2));
 
                 }
             }
