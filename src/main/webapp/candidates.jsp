@@ -35,6 +35,10 @@
                     <thead>
                     <tr>
                         <th scope="col">Названия</th>
+                    <tr>
+                        <th scope="col">Названия</th>
+                        <th scope="col">Фото</th>
+                    </tr>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,6 +49,15 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${candidate.name}"/>
+                            </td>
+                            <td>
+                                PHOTO
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Delete</button>
                             </td>
                         </tr>
                     </c:forEach>
