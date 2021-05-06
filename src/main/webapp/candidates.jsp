@@ -35,10 +35,7 @@
                     <thead>
                     <tr>
                         <th scope="col">Названия</th>
-                    <tr>
-                        <th scope="col">Названия</th>
                         <th scope="col">Фото</th>
-                    </tr>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,7 +51,9 @@
                                 PHOTO
                             </td>
                             <td>
-                                <button type="submit" class="btn btn-primary">Add</button>
+                                <form action="photoUpload.jsp?id=${candidate.id}">
+                                    <button  class="btn btn-primary">Add photo</button>
+                                </form>
                             </td>
                             <td>
                                 <button type="submit" class="btn btn-primary">Delete</button>
