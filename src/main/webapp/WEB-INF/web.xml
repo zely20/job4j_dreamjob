@@ -28,6 +28,10 @@
     <servlet-name>DeleteCandidateServlet</servlet-name>
     <servlet-class>ru.job4j.dreamjob.servlet.DeleteCandidateServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>ru.job4j.dreamjob.servlet.AuthServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>CandidateServlet</servlet-name>
     <url-pattern>/candidates.do</url-pattern>
@@ -51,5 +55,9 @@
   <servlet-mapping>
     <servlet-name>DeleteCandidateServlet</servlet-name>
     <url-pattern>/deleteCandidate</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/auth.do</url-pattern>
   </servlet-mapping>
 </web-app>
