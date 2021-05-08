@@ -34,7 +34,7 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Названия</th><th scope="col">Фото</th><th scope="col">add Photo</th>
+                        <th scope="col">Названия</th><th scope="col">Фото</th><th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,7 @@
                                 <c:out value="${candidate.name}"/>
                             </td>
                             <td>
-                                PHOTO
+                                <img src='<c:url value="/download?name=${candidate.id}"/>' width="50px" height="50px"/>
                             </td>
                             <td>
                                 <a href='<c:url value="/photoUpload.jsp?id=${candidate.id}"/>'>

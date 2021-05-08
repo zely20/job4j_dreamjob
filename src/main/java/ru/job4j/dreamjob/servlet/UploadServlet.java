@@ -31,6 +31,7 @@ public class UploadServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String fileName = req.getParameter("id");
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletContext servletContext = this.getServletConfig().getServletContext();
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
@@ -44,7 +45,7 @@ public class UploadServlet extends HttpServlet {
             }
             for (FileItem item : items) {
                 if (!item.isFormField()) {
-                    File file = new File(folder + File.separator + item.getName());
+                    File file = new File(folder + File.separator + fileName);
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
