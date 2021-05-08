@@ -21,6 +21,15 @@ public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
     private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
+    private static final String DELETE_CANDIDATE = "DELETE FROM candidate WHERE id=(?)";
+    private static final String FIND_ALL_POSTS = "SELECT * FROM post";
+    private static final String FIND_ALL_CANDIDATES = "SELECT * FROM candidate";
+    private static final String CREATE_CANDIDATES = "INSERT INTO candidate(name) VALUES (?)";
+    private static final String CREATE_POST = "INSERT INTO post(name) VALUES (?)";
+    private static final String UPDATE_POST = "UPDATE post SET name = (?) WHERE id = (?)";
+    private static final String UPDATE_CANDIDATES = "UPDATE candidate SET name = (?) WHERE id = (?)";
+    private static final String FIND_BY_ID_POST = "SELECT * FROM post WHERE id=(?)";
+    private static final String FIND_BY_ID_CANDIDATES = "SELECT * FROM candidate WHERE id=(?)";
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -57,7 +66,7 @@ public class PsqlStore implements Store {
     public Collection<Post> findAllPosts() {
         List<Post> posts = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post")
+             PreparedStatement ps =  cn.prepareStatement(FIND_ALL_POSTS)
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -74,7 +83,7 @@ public class PsqlStore implements Store {
     public Collection<Candidate> findAllCandidates() {
         List<Candidate> candidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
+             PreparedStatement ps = cn.prepareStatement(FIND_ALL_CANDIDATES)
         ){
             try (ResultSet it = ps.executeQuery()){
                 while (it.next()) {
@@ -107,7 +116,7 @@ public class PsqlStore implements Store {
 
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement(CREATE_POST, PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
             ps.execute();
@@ -124,7 +133,7 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement(CREATE_CANDIDATES, PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
             ps.execute();
@@ -141,7 +150,7 @@ public class PsqlStore implements Store {
 
     private void update(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = (?) WHERE id = (?) ", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps = cn.prepareStatement(UPDATE_POST, PreparedStatement.RETURN_GENERATED_KEYS)
         ){
             ps.setString(1, post.getName());
             ps.setInt(2, post.getId());
@@ -153,7 +162,7 @@ public class PsqlStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-        PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = (?) WHERE id = (?) ", PreparedStatement.RETURN_GENERATED_KEYS))
+        PreparedStatement ps = cn.prepareStatement(UPDATE_CANDIDATES, PreparedStatement.RETURN_GENERATED_KEYS))
         {
             ps.setString(1, candidate.getName());
             ps.setInt(2, candidate.getId());
@@ -167,7 +176,7 @@ public class PsqlStore implements Store {
     public Post findByIdPost(int id) {
         Post result = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id=(?)")
+             PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID_POST)
         ) {
             ps.setInt(1, id);
             ps.execute();
@@ -187,7 +196,7 @@ public class PsqlStore implements Store {
     public Candidate findByIdCandidate(int id) {
         Candidate result = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM candidate WHERE id=(?)")
+             PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID_CANDIDATES)
         ) {
             ps.setInt(1, id);
             ps.execute();
@@ -201,5 +210,18 @@ public class PsqlStore implements Store {
             LOG.error("find by id candidate", e);
         }
         return result;
+    }
+
+    @Override
+    public Integer deleteCandidate(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(DELETE_CANDIDATE)
+        ) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (SQLException e) {
+            LOG.error("Don't delete candidate with id= " + id, e);
+        }
+        return id;
     }
 }
