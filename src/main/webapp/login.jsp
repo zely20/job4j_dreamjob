@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dreamjob.model.Candidate" %>
 <%@ page import="ru.job4j.dreamjob.store.PsqlStore" %>
@@ -28,6 +29,11 @@
             <div class="card-header">
                 Авторизация
             </div>
+            <c:if test="${not empty error}">
+                <div style="color:red; font-weight: bold; margin: 30px 0;">
+                    <c:out value="${error}"/>
+                </div>
+            </c:if>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
