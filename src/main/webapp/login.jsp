@@ -29,11 +29,6 @@
             <div class="card-header">
                 Авторизация
             </div>
-            <c:if test="${not empty error}">
-                <div style="color:red; font-weight: bold; margin: 30px 0;">
-                    <c:out value="${error}"/>
-                </div>
-            </c:if>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
@@ -49,6 +44,11 @@
             </div>
         </div>
     </div>
+    <c:if test="${not empty error}">
+        <div style="color:red; font-weight: bold; margin: 30px 0;">
+            <c:out value="${error}"/>
+        </div>
+    </c:if>
 </div>
 </body>
 </html>
