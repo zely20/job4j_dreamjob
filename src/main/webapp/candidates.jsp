@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="container pt-3">
-
+        <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp"> <c:out value="${user.name}"/> | Выйти</a>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
