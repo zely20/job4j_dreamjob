@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.Post;
+import ru.job4j.dreamjob.model.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,6 +31,8 @@ public class PsqlStore implements Store {
     private static final String UPDATE_CANDIDATES = "UPDATE candidate SET name = (?) WHERE id = (?)";
     private static final String FIND_BY_ID_POST = "SELECT * FROM post WHERE id=(?)";
     private static final String FIND_BY_ID_CANDIDATES = "SELECT * FROM candidate WHERE id=(?)";
+    private static final String CREATE_USER = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
+    private static final String FIND_BY_EMAIL_USER = "SELECT * FROM users WHERE email=(?)";
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -223,5 +226,39 @@ public class PsqlStore implements Store {
             LOG.error("Don't delete candidate with id= " + id, e);
         }
         return id;
+    }
+
+    @Override
+    public void saveUser (User user) {
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement(CREATE_USER)){
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+        } catch (SQLException e) {
+            LOG.error("Don't save User " + user.getName(), e);
+        }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+            PreparedStatement ps = cn.prepareStatement(FIND_BY_EMAIL_USER);
+        ) {
+            ps.setString(1, email);
+            ps.execute();
+            try (ResultSet result = ps.getResultSet()) {
+                if (result.next()) {
+                    user = new User(result.getInt(1), result.getString(2),
+                            result.getString(3), result.getString(4));
+
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error("Don't find user by email" + user.getEmail(), e);
+        }
+        return user;
     }
 }
