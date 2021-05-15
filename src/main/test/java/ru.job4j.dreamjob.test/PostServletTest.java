@@ -30,13 +30,14 @@ public class PostServletTest {
     @Test
     public void whenAddPostThenStoreIt() throws ServletException, IOException {
         //1. Создаем экземпляр класса
-        Store validate = new MemStore();
+        Store validate = MemStore.instOf();
         // 2. Это я так понимаю разрешает вызывать статические методы у класса
         PowerMockito.mockStatic(PsqlStore.class);
         //3. когда создается PsqlStore меняет его на MemStore
         when(PsqlStore.instOf()).thenReturn(validate);
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
+        when(req.getParameter("id")).thenReturn("1");
         when(req.getParameter("name")).thenReturn("Petr Arsentev");
         new PostServlet().doPost(req, resp);
         assertThat(validate.findAllPosts().iterator().next().getName(), is("Petr Arsentev"));
