@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.servlet.PostServlet;
 import ru.job4j.dreamjob.store.MemStore;
 import ru.job4j.dreamjob.store.PsqlStore;
@@ -42,4 +43,20 @@ public class PostServletTest {
         new PostServlet().doPost(req, resp);
         assertThat(validate.findAllPosts().iterator().next().getName(), is("Petr Arsentev"));
     }
+
+    @Test
+    public void whenDoPostUpdatePost() throws ServletException, IOException {
+        Store validate = MemStore.instOf();
+        Post post = new Post(1, "name");
+        validate.save(post);
+        PowerMockito.mockStatic(PsqlStore.class);
+        when(PsqlStore.instOf()).thenReturn(validate);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        when(req.getParameter("id")).thenReturn(String.valueOf(post.getId()));
+        when(req.getParameter("name")).thenReturn("update name");
+        new PostServlet().doPost(req, resp);
+        assertThat(validate.findAllPosts().iterator().next().getName(), is("update name"));
+    }
 }
+
