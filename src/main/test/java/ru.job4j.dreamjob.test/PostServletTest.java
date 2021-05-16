@@ -77,7 +77,6 @@ public class PostServletTest {
         //when(req.getSession().getAttribute("user")).thenReturn("test");
         postServlet.doGet(req,resp);
         verify(req, times(1)).getRequestDispatcher("posts.jsp");
-
     }
 }
 
