@@ -7,12 +7,14 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import ru.job4j.dreamjob.model.Post;
+import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.servlet.PostServlet;
 import ru.job4j.dreamjob.store.MemStore;
 import ru.job4j.dreamjob.store.PsqlStore;
 import ru.job4j.dreamjob.store.Store;
 import ru.job4j.dreamjob.stub.ValidateStub;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +22,7 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 //класс который мы поменяем
@@ -57,6 +58,26 @@ public class PostServletTest {
         when(req.getParameter("name")).thenReturn("update name");
         new PostServlet().doPost(req, resp);
         assertThat(validate.findAllPosts().iterator().next().getName(), is("update name"));
+    }
+
+    @Test
+    public void whenDoGet() throws ServletException, IOException {
+        Store validate = MemStore.instOf();
+        Post post = new Post(1, "name");
+        PostServlet postServlet = new PostServlet();
+        validate.save(post);
+        PowerMockito.mockStatic(PsqlStore.class);
+        when(PsqlStore.instOf()).thenReturn(validate);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        RequestDispatcher rd = mock(RequestDispatcher.class);
+        //nullPointer
+        req.getSession().setAttribute("user", "test");
+        when(req.getRequestDispatcher("posts.jsp")).thenReturn(rd);
+        //when(req.getSession().getAttribute("user")).thenReturn("test");
+        postServlet.doGet(req,resp);
+        verify(req, times(1)).getRequestDispatcher("posts.jsp");
+
     }
 }
 
