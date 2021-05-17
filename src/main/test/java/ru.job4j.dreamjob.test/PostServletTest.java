@@ -18,6 +18,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -70,11 +71,11 @@ public class PostServletTest {
         when(PsqlStore.instOf()).thenReturn(validate);
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
         RequestDispatcher rd = mock(RequestDispatcher.class);
-        //nullPointer
-        req.getSession().setAttribute("user", "test");
+        session.getServletContext().addServlet("PostServlet", postServlet);
         when(req.getRequestDispatcher("posts.jsp")).thenReturn(rd);
-        //when(req.getSession().getAttribute("user")).thenReturn("test");
+        when(req.getSession().getAttribute("user")).thenReturn("test");
         postServlet.doGet(req,resp);
         verify(req, times(1)).getRequestDispatcher("posts.jsp");
     }
