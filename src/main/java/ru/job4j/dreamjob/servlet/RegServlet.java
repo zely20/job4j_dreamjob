@@ -22,7 +22,7 @@ public class RegServlet extends HttpServlet {
             PsqlStore.instOf().saveUser(
                     new User(0, req.getParameter("name"), email, req.getParameter("password"))
             );
-            resp.sendRedirect(req.getContextPath() + "/posts.do");
+            resp.sendRedirect(req.getContextPath());
         }
     }
 }
