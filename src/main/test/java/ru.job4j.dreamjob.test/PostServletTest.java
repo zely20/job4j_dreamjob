@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -73,9 +74,8 @@ public class PostServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         HttpSession session = mock(HttpSession.class);
         RequestDispatcher rd = mock(RequestDispatcher.class);
-        session.getServletContext().addServlet("PostServlet", postServlet);
+        Mockito.when(req.getSession()).thenReturn(session);
         when(req.getRequestDispatcher("posts.jsp")).thenReturn(rd);
-        when(req.getSession().getAttribute("user")).thenReturn("test");
         postServlet.doGet(req,resp);
         verify(req, times(1)).getRequestDispatcher("posts.jsp");
     }
