@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Index</title>
@@ -15,6 +15,21 @@
                 return false;
             }
             return true;
+        }
+    </script>
+    <script>
+        function add() {
+            var id = $('#id').val();
+            var second_name = $('#second_name').val();
+            var first_name = $('#first_name').val();
+            var description = $('#description').val();
+            var sex = $('#sex').val();
+            $('#table tbody tr:last').after('<tr><td>' + id +'</td>' +
+                '<td>' + second_name + '</td>' +
+                '<td>' + first_name + '</td>' +
+                '<td>' + sex + '</td>' +
+                '<td>' + description + '</td>' +
+                '</tr>');
         }
     </script>
 </head>
@@ -40,8 +55,8 @@
         </div>
         <div class="form-row align-items-center">
             <div class="col-auto my-1">
-                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">SEX</label>
-                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <label class="mr-sm-2 sr-only" for="sex">SEX</label>
+                <select class="custom-select mr-sm-2" id="sex">
                     <option value="1">Male</option>
                     <option value="2">Female</option>
                 </select>
@@ -49,6 +64,7 @@
         </div>
         <button type="submit" class="btn btn-default" onclick="validate()">Submit</button>
     </form>
+    <button type="button" class="btn btn-default" onclick="add()">Add</button>
     <table class="table">
         <thead>
         <tr>
@@ -60,24 +76,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>Male</td>
-            <td>dsad</td>
-        </tr>
-        <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>Female</td>
-            <td>dsa</td>
-        </tr>
-        <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>Female</td>
-            <td>dassd</td>
-        </tr>
         </tbody>
     </table>
 </div>
