@@ -1,5 +1,7 @@
 package ru.job4j.dreamjob.servlet;
 
+import org.json.JSONObject;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +13,15 @@ public class GreetingServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/plain");
+        resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         String name = req.getParameter("name");
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        JSONObject json = new JSONObject();
+        json.put("Welcome", name);
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        writer.println(name);
+        writer.println("Welcome " + name);
+        writer.println(json.toString());
         writer.flush();
     }
 }
