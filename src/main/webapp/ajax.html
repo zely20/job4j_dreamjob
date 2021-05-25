@@ -18,7 +18,7 @@
             data: { name :  $('#exampleInputEmail1').val()},
             dataType: 'json'
         }).done(function(data) {
-            $('#email_form').before(JSON.stringify(data));
+            $('#email_form').before(data['rsl']);
         }).fail(function(err){
             alert(err);
         });
