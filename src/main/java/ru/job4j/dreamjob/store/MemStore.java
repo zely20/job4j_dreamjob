@@ -1,6 +1,7 @@
 package ru.job4j.dreamjob.store;
 
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 
@@ -60,6 +61,11 @@ public class MemStore implements Store {
 
     @Override
     public User findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
         return null;
     }
 

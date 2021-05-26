@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 
@@ -25,7 +26,7 @@ public class PsqlStore implements Store {
     private static final String DELETE_CANDIDATE = "DELETE FROM candidate WHERE id=(?)";
     private static final String FIND_ALL_POSTS = "SELECT * FROM post";
     private static final String FIND_ALL_CANDIDATES = "SELECT * FROM candidate";
-    private static final String CREATE_CANDIDATES = "INSERT INTO candidate(name) VALUES (?)";
+    private static final String CREATE_CANDIDATES = "INSERT INTO candidate(name, city_id) VALUES (?, ?)";
     private static final String CREATE_POST = "INSERT INTO post(name) VALUES (?)";
     private static final String UPDATE_POST = "UPDATE post SET name = (?) WHERE id = (?)";
     private static final String UPDATE_CANDIDATES = "UPDATE candidate SET name = (?) WHERE id = (?)";
@@ -33,6 +34,7 @@ public class PsqlStore implements Store {
     private static final String FIND_BY_ID_CANDIDATES = "SELECT * FROM candidate WHERE id=(?)";
     private static final String CREATE_USER = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
     private static final String FIND_BY_EMAIL_USER = "SELECT * FROM users WHERE email=(?)";
+    private static final String FIND_ALL_CITIES = "SELECT * FROM cities";
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -84,19 +86,24 @@ public class PsqlStore implements Store {
 
     @Override
     public Collection<Candidate> findAllCandidates() {
-        List<Candidate> candidates = new ArrayList<>();
+        List<Candidate> allCandidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(FIND_ALL_CANDIDATES)
-        ){
-            try (ResultSet it = ps.executeQuery()){
+             PreparedStatement statement = cn.prepareStatement(
+                     "SELECT c.id, c.name, c2.title AS city FROM candidates c JOIN cities c2 ON c.city_id = c2.id")
+        ) {
+            try (ResultSet it = statement.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                    allCandidates.add(new Candidate(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("city")
+                    ));
                 }
             }
-        } catch (SQLException e) {
-            LOG.error("find All candidate error", e);
+        } catch (SQLException se) {
+            LOG.error(se.toString(), se);
         }
-        return candidates;
+        return allCandidates;
     }
 
     @Override
@@ -139,6 +146,7 @@ public class PsqlStore implements Store {
              PreparedStatement ps =  cn.prepareStatement(CREATE_CANDIDATES, PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -197,22 +205,24 @@ public class PsqlStore implements Store {
 
     @Override
     public Candidate findByIdCandidate(int id) {
-        Candidate result = null;
+        Candidate candidate = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID_CANDIDATES)
-        ) {
-            ps.setInt(1, id);
-            ps.execute();
-            try (ResultSet post = ps.getResultSet()) {
-                if (post.next()) {
-                    result = new Candidate(post.getInt(1), post.getString(2));
-
+             PreparedStatement statement = cn.prepareStatement(
+                     "SELECT c.id, c.name, c2.title as city FROM candidates c JOIN cities c2 ON c.city_id = c2.id WHERE c.id = ?")) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    candidate = new Candidate(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("city")
+                    );
                 }
             }
-        } catch (Exception e) {
-            LOG.error("find by id candidate", e);
+        } catch (SQLException se) {
+            LOG.error(se.toString(), se);
         }
-        return result;
+        return candidate;
     }
 
     @Override
@@ -260,5 +270,24 @@ public class PsqlStore implements Store {
             LOG.error("Don't find user by email" + user.getEmail(), e);
         }
         return user;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        List<City> allCities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement statement = cn.prepareStatement(FIND_ALL_CITIES)) {
+            try (ResultSet it = statement.executeQuery()) {
+                while (it.next()) {
+                    allCities.add(new City(
+                            it.getInt("id"),
+                            it.getString("title")
+                    ));
+                }
+            }
+        } catch (SQLException se) {
+            LOG.error(se.toString(), se);
+        }
+        return allCities;
     }
 }

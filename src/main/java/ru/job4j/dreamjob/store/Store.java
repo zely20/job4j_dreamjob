@@ -1,6 +1,7 @@
 package ru.job4j.dreamjob.store;
 
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 
@@ -25,4 +26,5 @@ public interface Store {
 
     User findByEmail(String email);
 
+    Collection<City> findAllCities();
 }

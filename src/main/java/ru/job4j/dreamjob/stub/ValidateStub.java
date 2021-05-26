@@ -1,6 +1,7 @@
 package ru.job4j.dreamjob.stub;
 
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.store.Store;
@@ -54,6 +55,11 @@ public class ValidateStub implements Store {
 
     @Override
     public User findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
         return null;
     }
 }
