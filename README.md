@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/zely20/job4j_dreamjob.svg?branch=master)](https://travis-ci.com/zely20/job4j_dreamjob)
 ### Web-application for searching and adding vacancies and candidates
 
-Технологии:
+Technologies:
 
 Java Servlet API
 
@@ -31,7 +31,7 @@ Travis CI, CodeCov, CheckStyle
 ![ScreenShot](images/Auth.jpg)
 ![ScreenShot](images/Auth_error.jpg)
 
-###Page of Vacancies
+### Page of Vacancies
 
 ![ScreenShot](images/page_post.jpg)
 
