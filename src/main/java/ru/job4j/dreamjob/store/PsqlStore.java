@@ -89,7 +89,7 @@ public class PsqlStore implements Store {
         List<Candidate> allCandidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement statement = cn.prepareStatement(
-                     "SELECT c.id, c.name, c2.title AS city FROM candidates c JOIN cities c2 ON c.city_id = c2.id")
+                     "SELECT c.id, c.name, c2.title AS city FROM candidate c JOIN cities c2 ON c.city_id = c2.id")
         ) {
             try (ResultSet it = statement.executeQuery()) {
                 while (it.next()) {
@@ -208,7 +208,7 @@ public class PsqlStore implements Store {
         Candidate candidate = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement statement = cn.prepareStatement(
-                     "SELECT c.id, c.name, c2.title as city FROM candidates c JOIN cities c2 ON c.city_id = c2.id WHERE c.id = ?")) {
+                     "SELECT c.id, c.name, c2.title as city FROM candidate c JOIN cities c2 ON c.city_id = c2.id WHERE c.id = ?")) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {

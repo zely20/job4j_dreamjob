@@ -24,6 +24,14 @@ public class Candidate {
         this.cityId = cityId;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public int getCityId() {
         return cityId;
     }
